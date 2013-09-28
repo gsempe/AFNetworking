@@ -24,6 +24,7 @@
 
 #import "AFHTTPClient.h"
 #import "AFHTTPRequestOperation.h"
+#import "AFJSONRequestOperation.h"
 
 #import <Availability.h>
 
@@ -614,6 +615,9 @@ static void AFNetworkReachabilityReleaseCallback(const void *info) {}
 {
 	NSURLRequest *request = [self requestWithMethod:@"POST" path:path parameters:parameters];
 	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
+    if ([operation isKindOfClass:[AFJSONRequestOperation class]] && [operation respondsToSelector:@selector(setJSONReadingOptions:)]) {
+        ((AFJSONRequestOperation *) operation).JSONReadingOptions = NSJSONReadingAllowFragments;
+    }
     [self enqueueHTTPRequestOperation:operation];
 }
 
